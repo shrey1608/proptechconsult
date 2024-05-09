@@ -3,19 +3,15 @@ import Layout from '../../layouts/Layout.astro';
 import Markdown from '../../components/Markdown.astro';
 
 const explainer = `
-# You've reached the fallback page.
+# From Classroom Ideas to Provisional Patents
 
-This page is using a [Netlify Edge Function](https://docs.netlify.com/edge-functions/overview/) to rewrite the URL based on visitor geography.
+We guide students in turning their creative ideas into viable inventions with the help of in-house patent lawyers and industrial experts who collectively hold over 100 patents. Our program includes interactive workshops and personalized sessions to refine and develop their concepts.
 
-For it to be invoked, please either run this site locally with \`netlify dev\` or deploy it to Netlify.
+We also provide comprehensive support in filing provisional patents with the USPTO, protecting students' inventions early and setting the stage for future patent achievements.
 
-Edge Functions are framework-agnostic, but are also used behind the scenes to run Astro Middleware on Netlify.
-There are advatanges to using Edge Functions directly, such as the ability to access & transform the response body.
-
-[See more examples](https://edge-functions-examples.netlify.app)
 `;
 ---
 
-<Layout title="Fallback">
+<Layout title="Patents">
     <Markdown content={explainer} />
 </Layout>
