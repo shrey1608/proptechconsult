@@ -1,126 +1,47 @@
 ---
-import { Image } from 'astro:assets';
-import ContextAlert from '../components/ContextAlert.astro';
 import Layout from '../layouts/Layout.astro';
+import ContextAlert from '../components/ContextAlert.astro';
 import Markdown from '../components/Markdown.astro';
-import corgi from '../assets/corgi.jpg';
-import { getNetlifyContext } from '../utils';
+import { cacheHeaders, randomInt } from '../utils';
 
-const sampleImage = '/images/corgi.jpg';
+export const prerender = false;
 
-const ctx = getNetlifyContext();
-const forceWebP = ctx === 'dev';
-const sampleImageSrcSet = [640, 1280, 2048]
-    .map((size) => {
-        return `/.netlify/images?url=${sampleImage}&w=${size}${forceWebP ? '&fm=webp' : ''} ${size}w`;
-    })
-    .join(', ');
-const sizes = '(max-width: 1024px) 100vw, 1024px';
+const tags = ['/revalidation', 'cats-related', 'all-pets-related'];
+const headers = cacheHeaders(365, tags);
 
-const astroImageSnippet = `
-## Using the built-in Astro &lt;Image /&gt; component
+Object.entries(headers).map(([k, v]) => {
+    Astro.response.headers.set(k, v);
+});
 
-Astro's \`Image\` component will automatically use Netlify Image CDN to serve optimized images.
+const explainer = `
+We help students obtain prestigious fellowships with various institutes by providing tailored guidance and application assistance. Our partnerships with educational institutions ensure that students receive opportunities best suited to their academic and professional goals.
 
-~~~jsx
----
-import { Image } from 'astro:assets';
-import corgi from '../assets/corgi.jpg';
----
-// Later in your markup...
-<Image src={corgi} alt="Corgi" /* ... additional props */ />
-~~~
+We facilitate valuable recommendations from both the host institutes and industry mentors. Our network of experienced professionals, who are deeply embedded in the industry, offer mentorship that enhances the students' profiles and supports their fellowship applications.
 `;
 
-const originalVsCdnSnippet = `
-## Original vs. optimized image: can you tell the difference?
-
-In the code below, a regular \`<img>\` tag is used in both cases for a framework-agnostic example. 
-Note that aside from Astro's \`Image\` or rolling your own \`<img>\` tags, you can also use the excellent [unpic-img](https://unpic.pics/) package.
-
-~~~jsx
-// <== On the left, the original image
-<img src="/images/corgi.jpg" alt="Corgi" />
-
-// ==> On the right, explicitly using Netlify Image CDN endpoint for a responsive image
-<img 
-  srcSet="${sampleImageSrcSet}"
-  sizes="${sizes}" 
-  alt="Corgi" 
-/>
-~~~
-`;
-
-const devModeWarning = `
-In local development, optimization is performed locally without automatic format
-detection, so format is set to WebP.
-`;
+const exampleTag = tags[randomInt(0, tags.length - 1)];
 ---
 
-<Layout title="Image CDN">
-    <div class="flex flex-col gap-12 sm:gap-16">
-        <section class="space-y-8">
-            <ContextAlert
-                addedChecksFunction={(ctx) => {
-                    return ctx === 'dev' ? devModeWarning : null;
-                }}
-            />
-            <h1>Image CDN</h1>
-        </section>
-        <section>
-            <Markdown content={astroImageSnippet} class="mb-8" />
-            <figure>
-                <Image src={corgi} alt="Corgi" class="border-2 border-white rounded-lg" />
-                <figcaption class="mt-2 text-sm italic">
-                    Credit: photo by <a href="https://unsplash.com/@alvannee">Alvan Nee</a> on
-                    <a href="https://unsplash.com/photos/long-coated-white-and-brown-dog-lvFlpqEvuRM"> Unsplash </a>
-                </figcaption>
-            </figure>
-        </section>
-        <section>
-            <Markdown content={originalVsCdnSnippet} class="mb-8" />
-            <div class="diff aspect-[3/2] rounded-lg border-2 border-white">
-                <div class="diff-item-1">
-                    <div>
-                        <div class="relative">
-                            <span class="hidden absolute py-1.5 px-2.5 text-sm rounded-lg bg-neutral-900/70 top-2.5 right-2.5"></span>
-                            <img srcset={sampleImageSrcSet} alt="Corgi" />
-                        </div>
-                    </div>
-                </div>
-                <div class="diff-item-2">
-                    <div>
-                        <div class="relative">
-                            <span class="hidden absolute py-1.5 px-2.5 text-sm rounded-lg bg-neutral-900/70 top-2.5 left-2.5"></span>
-                            <img src={sampleImage} alt="Corgi" />
-                        </div>
-                    </div>
-                </div>
-                <div class="diff-resizer"></div>
-            </div>
-        </section>
-    </div>
+<Layout title="Fellowship">
+    <h1 class="mb-10">Unlocking Academic and Professional Opportunities</h1>
+    <Markdown content={explainer} class="mb-10" />
 </Layout>
 
 <script>
-    const images = document.querySelectorAll<HTMLImageElement>('.diff img');
-
-    images.forEach((image) => {
-        if (image.complete) {
-            showImageSize(image);
-        } else {
-            image.addEventListener('load', () => {
-                showImageSize(image);
-            });
-        }
-    });
-
-    function showImageSize(image: HTMLImageElement) {
-        const imageEntry = window?.performance?.getEntriesByName(image.currentSrc)?.[0] as PerformanceResourceTiming;
-        if (imageEntry && imageEntry.encodedBodySize) {
-            const imageOverlay = image.previousElementSibling;
-            imageOverlay.classList.remove('hidden');
-            imageOverlay.textContent = `Size: ${Math.ceil(imageEntry.encodedBodySize / 1024)}KB`;
-        }
+    function revalidate(tag: string) {
+        fetch('/api/revalidate', {
+            method: 'POST',
+            body: JSON.stringify({ tags: [tag] }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        alert(`Invalidated tag: ${tag}`);
     }
+
+    const revalidateButton = document.querySelectorAll('button.revalidate-button')[0];
+    revalidateButton.addEventListener('click', (e) => {
+        const tag = (e.target as HTMLButtonElement).getAttribute('data-tag');
+        revalidate(tag);
+    });
 </script>
