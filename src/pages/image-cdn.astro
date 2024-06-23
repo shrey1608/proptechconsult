@@ -14,9 +14,66 @@ Object.entries(headers).map(([k, v]) => {
 });
 
 const explainer = `
-We help students obtain prestigious fellowships with various institutes by providing tailored guidance and application assistance. Our partnerships with educational institutions ensure that students receive opportunities best suited to their academic and professional goals.
 
-We facilitate valuable recommendations from both the host institutes and industry mentors. Our network of experienced professionals, who are deeply embedded in the industry, offer mentorship that enhances the students' profiles and supports their fellowship applications.
+<Layout>
+  <style>
+    section {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-left: 5px solid #007bff;
+    }
+
+    h1, h2 {
+      color: #007bff;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    p, li {
+      line-height: 1.6;
+    }
+
+    .contact-section {
+      padding: 20px;
+      border: none;
+    }
+  </style>
+
+  <section>
+    <h2>Welcome to Thinkorate, Your Pathway to Extraordinary Ability Recognition</h2>
+    <p>At Thinkorate, we understand that applying for an EB1A or O1A visa represents more than just paperwork; it's about recognizing your contributions to your field and your potential impact in the United States. Our dedicated team of experts is here to guide exceptional talents like you through every step of the visa application process.</p>
+  </section>
+
+  <section>
+    <h2>Our Comprehensive Services Include:</h2>
+    <ul>
+      <li><strong>Publication Support</strong>: Enhance your portfolio with our publication assistance services. We help you publish your findings in esteemed journals, increasing your visibility and proving your extraordinary abilities in your field.</li>
+      <li><strong>Judging and Peer Review</strong>: Establish your reputation as a leader by participating in peer reviews and judging panels. Our connections can help you secure positions that elevate your standing in your community.</li>
+      <li><strong>Documentation and Application Preparation</strong>: Our experts simplify the complex process of documentation. We ensure that your application showcases your achievements and aligns perfectly with USCIS requirements.</li>
+      <li><strong>Career Planning and Networking</strong>: Leverage our extensive network to find opportunities that can further demonstrate your extraordinary abilities. We provide networking opportunities and strategic career planning.</li>
+      <li><strong>Legal and Advisory Support</strong>: Navigate the legal intricacies of the EB1A and O1A visa applications with our experienced immigration attorneys. Receive personalized advice tailored to your unique case.</li>
+      <li><strong>Interview Preparation</strong>: Go into your visa interview with confidence. Our coaching includes mock interviews and strategy sessions to help you communicate your achievements effectively.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Why Choose Thinkorate?</h2>
+    <p>- <strong>Proven Success</strong>: Our track record of successful visa approvals speaks for itself. We pride ourselves on helping our clients achieve their dreams of working in the U.S.</p>
+    <p>- <strong>Personalized Service</strong>: We believe every talent is unique. Our personalized approach ensures that your application highlights your specific contributions and potential.</p>
+    <p>- <strong>Expert Team</strong>: Our team comprises immigration specialists, legal professionals, and industry experts, all dedicated to your success.</p>
+  </section>
+
+  <section class="contact-section">
+    <h2>Contact Us Today!</h2>
+    <p>Schedule a consultation to discuss your eligibility and how we can assist you in your journey to achieving an EB1A or O1A visa.</p>
+  </section>
+</Layout>
 
 
 
@@ -26,7 +83,7 @@ const exampleTag = tags[randomInt(0, tags.length - 1)];
 ---
 
 <Layout title="Fellowship">
-    <h1 class="mb-10">Academic and Professional Opportunities</h1>
+    <h1 class="mb-10">Achieve Your American Dream with Expert EB1A and O1A Visa Supports</h1>
     <Markdown content={explainer} class="mb-10" />
 </Layout>
 
